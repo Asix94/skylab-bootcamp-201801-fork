@@ -5,10 +5,15 @@ const portMongo = process.env.MONGO_PORT
 const database = process.env.MONGO_DB
 const port = process.env.PORT
 
-const productRoute = require('./products/route_product')
-const categoryRoute = require('./categories/route_category')
-const orderRoute = require('./orders/route_order')
-const userRoute = require('./users/route_user')
+const hostClient = process.env.HOST_CLIENT
+const protocolClient = process.env.PROTOCOL_CLIENT
+const portClient = process.env.PORT_CLIENT
+
+const productRoute = require('./routes/product')
+const categoryRoute = require('./routes/category')
+const orderRoute = require('./routes/order')
+const userRoute = require('./routes/user')
+const passport = require('passport')
 
 const express = require('express')
 const app = express()
@@ -18,17 +23,21 @@ app.use(cors())
 
 const mongoose = require('mongoose')
 
+app.use(passport.initialize())
+
+
+//`${protocolClient}://${hostClient}:${portClient}` 'http://localhost:3000',`${protocolClient}://${hostClient}:${portClient}`
 //Cors
 app.use((req, res, next) => {
 
     // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Origin', '*');
 
     // Request methods you wish to allow
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT');
 
     // Request headers you wish to allow
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.setHeader('Access-Control-Allow-Headers', 'Authorization');
 
     // Set to true if you need the website to include cookies in the requests sent
     // to the API (e.g. in case you use sessions)
